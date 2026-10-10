@@ -78,20 +78,22 @@ def score_prospect(nom, activite, ville):
         "Vérifier la carte et le positionnement"
     )
 
+
 @st.cache_data(ttl=3600, show_spinner=False)
 def rechercher_inegi(terme, token):
     url = (
         "https://www.inegi.org.mx/app/api/denue/v1/consulta/"
-        f"BuscarEntidad/{quote(terme, safe='')}/03/"
+        f"buscarEntidad/{quote(terme, safe='')}/03/1/100/"
         f"{quote(token, safe='')}"
     )
+
     response = requests.get(url, timeout=30)
     response.raise_for_status()
-    donnees = response.json()
-    if isinstance(donnees, list):
-        return donnees
-    return []
 
+    donnees = response.json()
+    return donnees if isinstance(donnees, list) else []
+
+  
 st.sidebar.header("Recherche")
 st.sidebar.write("Répertoire officiel DENUE — INEGI")
 
